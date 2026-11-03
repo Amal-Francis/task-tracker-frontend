@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 function Home() {
     const [all, setAll] = useState([]);
+    const [taskStatus, setTaskStatus] = useState(false);
     const [active, setActive] = useState([]);
     const [errors, setErrors] = useState({});
     const [completed, setCompleted] = useState([]);
@@ -38,14 +39,31 @@ function Home() {
             setActive(response.data.active);
             setCompleted(response.data.completed);
             console.log(response.data.active);
+            setTaskStatus(true);
         }
         catch(error){
             console.log(error.response?.data || error.message );
         }
         
+        
     }
 
     const addTask = async () => {
+        
+        if(newTask.title === "")
+        {
+            setErrors({title : ['The title field is required.']})
+            return;
+        }
+        const id = all.length > 0 ? Math.max(...all.map(task => Number(task.id))) : 0;
+        setAll(prev =>[{
+            id : id + 1,
+            title : newTask.title,
+            updated_at : new Date().toISOString(),
+            created_at : ""
+        }, ...prev])
+
+        setErrors({title : ""});
         try{
             const response = await api.post('/add', newTask);
             console.log(response);
@@ -81,10 +99,27 @@ function Home() {
     }
 
     const toggleCompleted = async (id) => {
+        
+           const updated =  all.map(all =>
+            all.id === id ?
+            {...all , completed:!all.completed, updated_at : new Date().toISOString()}
+            : all
+        );
+
+        const sorted = updated.sort(
+            (a, b) =>  Number(a.completed) - Number (b.completed) ||
+                       new Date(b.updated_at) - new Date(a.updated_at)
+        );
+        
+        setAll(sorted)
+        setActive(sorted.filter(task => !task.completed));
+        setCompleted(sorted.filter(task => task.completed));
+
+
         try{
-            const response = await api.put(`/completed/${id}`)
+            await api.put(`/completed/${id}`)
             getTask();
-            console.log(response.data);
+            
         }
         catch(error){
             console.log(error.response?.data || error.message);
@@ -93,6 +128,10 @@ function Home() {
     }
 
     const remove = async (id) => {
+
+        setAll(all.filter((task) => task.id !== id));
+        setCompleted(completed.filter((task) =>task.id !== id));
+        setActive(active.filter((task) =>task.id !== id));
         try{
             await api.delete(`/delete/${id}`)
             getTask();
@@ -284,7 +323,7 @@ function Home() {
                             </AnimatePresence>
                             </div>
 
-                            :<div className='flex flex-col justify-center items-center h-full'>
+                            : taskStatus ? (<div className='flex flex-col justify-center items-center h-full'>
 
                                 <div className=' flex justify-center items-center w-10 h-10 bg-blue-600
                                     rounded-xl'>
@@ -294,17 +333,25 @@ function Home() {
                                     className='text-center font-semibold text-lg font-serif mt-2'
                                 >
 
-                                    A fresh page.
+                                    { all.length === 0 ? "A fresh page." 
+                                     : active.length === 0 ? "No active task found" : "No completed task found"}
                                     
                                 </h3>
 
                                 <p
                                     className='text-gray-600 font-serif text-md mt-1'>
 
-                                    Add your first task above to get started.
+                                    { all.length === 0 ? "Add your first task above to get started." : ""}
                                     
                                 </p>
-                            </div>
+                            </div>)
+                            : (<div className='flex flex-col justify-center min-h-full mt-10 items-center'>
+                                    <div className='h-10 w-10 border-4 border-gray-300 border-t-blue-600 rounded-full
+                                     animate-spin'>
+
+                                    </div>
+                                    <h2>Loading</h2>
+                            </div>)
                             }
                     </div>
 
