@@ -45,7 +45,13 @@ function Login() {
         catch(error){
             const err = error.response?.data?.message;
             console.log(error.response?.data || error.message);
-            setError(err || "");
+            if(error.response?.status === 422){
+                
+                setError(err || "");
+            }else{
+                alert(error.response?.data?.message)
+            }
+            
         }
         finally{
             setLoading(false);

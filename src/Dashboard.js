@@ -1,5 +1,5 @@
 import { FaCheck, FaTrash } from 'react-icons/fa';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 import api from './api';
 import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
@@ -21,17 +21,8 @@ function Dashboard() {
 
     });
 
-    useEffect(() =>{
-        getTask();
-    },[]);
 
-    
-    const filterdTask = status.all? all
-                        :status.active ? active
-                        :completed;
-                             
-
-    const getTask = async() => {
+    const getTask = useCallback(async() => {
         try{
             const response = await api.get('/show');
             const task = response.data.all;
@@ -67,8 +58,20 @@ function Dashboard() {
         }
         
         
-    }
+    }, [navigate])
 
+
+    useEffect(() =>{
+        getTask();
+    },[getTask]); 
+
+    
+    const filterdTask = status.all? all
+                        :status.active ? active
+                        :completed;
+                             
+
+    
     const addTask = async () => {
         
         if(newTask.title === "")
@@ -92,7 +95,7 @@ function Dashboard() {
             getTask();
         }
         catch(error){
-            if(error.response?.statu === 401){
+            if(error.response?.status === 401){
                 navigate('/login');
             }
             if(error.response?.status === 422 ){
