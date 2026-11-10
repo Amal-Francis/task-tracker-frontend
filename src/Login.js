@@ -2,6 +2,7 @@ import { FaCheck } from "react-icons/fa";
 import { useState } from "react";
 import api from './api';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 
 function Login() {
@@ -34,7 +35,11 @@ function Login() {
         try{
             setLoading(true);
             
-            await api.get('http://localhost:8000/sanctum/csrf-cookie');
+            await axios.get('https://task-tracker-backend-rrol.onrender.com/sanctum/csrf-cookie',
+                {withCredentials:true,
+        
+                }
+            );
             
             await api.post('/login', credentials)
             setCredentials(credentialsFormat);

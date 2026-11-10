@@ -38,7 +38,7 @@ function Register(){
         try{
             setLoading(true);
 
-            await api.get('http://localhost:8000/sanctum/csrf-cookie');
+            await api.get('https://task-tracker-backend-rrol.onrender.com/sanctum/csrf-cookie');
 
             await api.post('/register', credentials);
             alert("Successfully Registered Please login to continue");
