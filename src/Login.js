@@ -1,11 +1,10 @@
 import { FaCheck } from "react-icons/fa";
 import { useState } from "react";
 import api from './api';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
-    const location = useLocation();
     const navigate = useNavigate();
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
