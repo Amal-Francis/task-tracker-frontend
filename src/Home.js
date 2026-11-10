@@ -1,362 +1,188 @@
-import { FaCheck, FaTrash } from 'react-icons/fa';
-import {useState, useEffect} from 'react';
-import api from './api';
-import { motion, AnimatePresence } from 'motion/react';
+import { FaCheck } from "react-icons/fa";
+import { FiCheck } from "react-icons/fi";
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
-    const [all, setAll] = useState([]);
-    const [taskStatus, setTaskStatus] = useState(false);
-    const [active, setActive] = useState([]);
-    const [errors, setErrors] = useState({});
-    const [completed, setCompleted] = useState([]);
-    const [newTask, setNewTask] = useState({title : ''});
-    const [status, setStatus] = useState({
-
-         all : true ,
-         active : false ,
-         completed : false ,
-
-    });
-
-    useEffect(() =>{
-        getTask();
-    },[]);
-
-    
-    const filterdTask = status.all? all
-                        :status.active ? active
-                        :completed;
-                             
-
-    const getTask = async() => {
-        try{
-            const response = await api.get('/show');
-            const task = response.data.all;
-            setAll([...task].sort(
-                (a, b) => Number(a.completed) - Number(b.completed)
-            ))
-            
-            setActive(response.data.active);
-            setCompleted(response.data.completed);
-            console.log(response.data.active);
-            setTaskStatus(true);
-        }
-        catch(error){
-            console.log(error.response?.data || error.message );
-        }
-        
-        
-    }
-
-    const addTask = async () => {
-        
-        if(newTask.title === "")
-        {
-            setErrors({title : ['The title field is required.']})
-            return;
-        }
-        const id = all.length > 0 ? Math.max(...all.map(task => Number(task.id))) : 0;
-        setAll(prev =>[{
-            id : id + 1,
-            title : newTask.title,
-            updated_at : new Date().toISOString(),
-            created_at : ""
-        }, ...prev])
-
-        setErrors({title : ""});
-        try{
-            const response = await api.post('/add', newTask);
-            console.log(response);
-            setNewTask({title : ''});
-            getTask();
-        }
-        catch(error){
-            if(error.response?.status === 422 ){
-
-                const errors = error.response.data.errors;
-                setErrors(errors);
-                console.log(errors.title?.[0]);
-            }else{
-                console.log("Something went wrong");
-            }
-        }
-    } 
-
-
-    const changeStatus = (e) => {
-        
-        const name = e.currentTarget.name;
-        
-        setStatus(prevStatuses =>{
-            return Object.fromEntries(
-                Object.entries(prevStatuses).map(([key]) =>{
-                    return [key, key === name];
-                })
-            )
-        }
-         );
-
-    }
-
-    const toggleCompleted = async (id) => {
-        
-           const updated =  all.map(all =>
-            all.id === id ?
-            {...all , completed:!all.completed, updated_at : new Date().toISOString()}
-            : all
-        );
-
-        const sorted = updated.sort(
-            (a, b) =>  Number(a.completed) - Number (b.completed) ||
-                       new Date(b.updated_at) - new Date(a.updated_at)
-        );
-        
-        setAll(sorted)
-        setActive(sorted.filter(task => !task.completed));
-        setCompleted(sorted.filter(task => task.completed));
-
-
-        try{
-            await api.put(`/completed/${id}`)
-            getTask();
-            
-        }
-        catch(error){
-            console.log(error.response?.data || error.message);
-        }
-        
-    }
-
-    const remove = async (id) => {
-
-        setAll(all.filter((task) => task.id !== id));
-        setCompleted(completed.filter((task) =>task.id !== id));
-        setActive(active.filter((task) =>task.id !== id));
-        try{
-            await api.delete(`/delete/${id}`)
-            getTask();
-
-        }
-        catch(error){
-            console.log(error.response?.data || error.message);
-            alert("Somthing went Wrong")
-        }
-    } 
-
-
+    const navigate = useNavigate();
     return(
-        <div className=" w-screen min-h-screen bg-gradient-to-bl from-red-50 to-blue-50 pb-10">
-            <div className="sticky top-0 z-50 flex justify-between bg-white shadow-lg
-                px-4 py-4 sm:px-8 md:px-20 gap-3">
-                <div className='flex items-center'>
-                    <div className=' flex  items-center justify-center h-8 w-8 bg-black rounded-lg mr-3'>
-                        <FaCheck className='text-white'/>
-                    </div>
-                    <h2>Task Tracker</h2>
-                </div>
 
-                <div>
-                    <p>A little progress every day</p>
-                </div>
-            </div>
-
-            <div className='w-full mx-auto max-w-3xl px-4'>
-                <h2 className='text-4xl font-bold font-serif mt-10'>
-                    Make room for what matters.
-                </h2>
-                <p
-                 className='font-serif text-gray-500 mt-2'
-                >
-                    A simple place to collect your tasks and keep moving
+        <div className=" w-full min-h-screen overflow-x-hidden bg-gradient-to-bl from-red-50 to-blue-50 pb-10">
                     
-                </p>
+                    <div className="sticky top-0 z-50 flex items-center justify-between bg-white shadow-lg
+                        px-4 py-4 sm:px-8 md:px-20 gap-3">
 
-                <div>
-                    <h3
-                        className='text-2xl font-semibold font-serif mt-6'
-                    >
-                        Add somthing to your list
-                        
-                    </h3>
+                        <div className='flex items-center'>
 
-                    <div className='w-full flex flex-col sm:flex-row gap-3 mt-3'>
-                        <input 
-                            className='w-full sm:flex-1  min-w-0 px-5 py-4 rounded-md border border-gray-300
-                                shadow-sm focus:outline-none focus:ring-1 focus:ring-green-500'
-                            type='text'
-                            name='title'
-                            placeholder='What nees to get done?'
-                            value={newTask.title}
-                            onChange={(e) => {setNewTask({
-                                title : e.target.value
-                            }) }}
-                        />
-                        <button 
-                            className='w-full sm:w-auto px-4 py-4 bg-amber-800 text-white font-semibold rounded-xl transition-all
-                                duration-500 hover:-translate-y-1 hover:bg-amber-900'
-                            onClick={addTask}
-                        >
-                            Add Task
-                        </button>
-                    </div>
-                    {
-                        errors.title && (
-                            <p className='text-red-500 text-sm mt-1 font-serif'>
-                                *{errors.title[0]}
-                            </p>
-                        )
-                    }
-                </div>
-
-                <div className='w-full mt-10 bg-white p-10 rounded-t-md shadow-md'>
-                    <div className='flex justify-between'>
-                        <h3
-                            className='font-semibold font-serif text-2xl'
-                        >
-                            Your tasks
-                            
-                        </h3>
-
-                        <p className='text-md text-gray-500'>{active.length} active . {all.length} total</p>
-                    </div>
-
-                    <div className='flex justify-start mt-5'>
-                        <button
-                            className={`px-4 py-2 rounded-lg mr-5 font-semibold
-                                ${status.all ? "bg-black text-white"  :  "text-black"}  `}
-                            name='all'
-                            onClick={changeStatus}
-                        >
-                            All
-                            
-                        </button>
-
-                        <button
-                            className={`px-4 py-2 mr-5 font-semibold rounded-lg
-                                ${status.active ? "bg-black text-white"  :  "text-black"}`}
-                                name='active'
-                            onClick={changeStatus}
-                        >
-                            Active
-                        
-                        </button>
-
-                        <button
-                            className={`px-4 py-2 font-semibold rounded-lg
-                                 ${status.completed ? "bg-black text-white"  :  "text-black"}`}
-                            name='completed'
-                            onClick={changeStatus}
-                        >
-                            Completed
-                            
-                        </button>
-
-                    </div>
-
-                </div>
-
-                <div className='w-full min-h-[250px] mt-[1px] bg-white p-10 rounded-b-md shadow-md h-full'>
-
-                    <div className=''>
-                        {filterdTask.length !== 0
-                            ?<div>
-                                <AnimatePresence>
-                                { 
-
+                            <div className=' flex  items-center justify-center h-8 w-8 bg-black rounded-lg mr-3'>
                                 
-                                    filterdTask.map((task) => {
-                                        return(
-                                            <motion.div
-                                                key={task.id}
-                                                layout
-                                                initial={{opacity: 0, y : 10}}
-                                                animate={{opacity: 1, y: 0}}
-                                                exit={{ opacity: 0, y: -10}}
-                                                transition={{
-                                                    layout:{
-                                                        type: "spring",
-                                                        stiffness: 300,
-                                                        damping: 30
-                                                    },
-                                                    opacity: { duration: 0.2 }
-                                                }}
-                                                className='flex items-center justify-between mb-5'
-                                            >
-                                                
-                                                    
-                                                <label
-                                                    className={`px-5 py-3  w-full mr-5 rounded-md font-serif hover:cursor-pointer
-                                                        flex items-center ${task.completed? 
-                                                            "border-2 border-green-500 text-green-500 bg-green-50" 
-                                                            : "border-2 border-gray-700" }`}
-                                                >
+                                <FaCheck className='text-white'/>
 
-                                                    <input 
-                                                    className='mr-3 h-5 w-5'
-                                                    id={task.id}
-                                                    type='checkbox'
-                                                    checked={task.completed}
-                                                    onChange={() => toggleCompleted(task.id)}
-                                                    />
-                                                        <div className='flex justify-between w-full'>
-                                                            <span className={`${task.completed ? "line-through" : ""}`}>{ task.title}</span>
-
-                                                            <p>{task.completed? "completed" : ""}</p>
-                                                        </div>
-                                                       
-                                                </label>
-                                                
-
-                                                <FaTrash size={20} className='text-red-500 transition-all duration-500
-                                                    hover:-translate-y-1 hover:text-red-600 '
-                                                    onClick={() =>remove(task.id)}
-                                                />
-                                                
-
-                                            
-                                        </motion.div>
-                                    )})}
-
-                                    
-                                    
-
-                            </AnimatePresence>
                             </div>
+                            <h2>Task Tracker</h2>
+                        </div>
+        
+                        <div>
+                            <p>A little progress every day</p>
+                        </div>
+                    </div>
 
-                            : taskStatus ? (<div className='flex flex-col justify-center items-center h-full'>
+                    <div className="mt-16 sm:mt-20 lg:mt-28 lg:px-10">
 
-                                <div className=' flex justify-center items-center w-10 h-10 bg-blue-600
-                                    rounded-xl'>
-                                    <FaCheck size={20} className='text-white'/>
-                                </div>
-                                <h3 
-                                    className='text-center font-semibold text-lg font-serif mt-2'
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 xl:gap-20 max-w-6xl mx-auto w-full px-5 lg:px-0">
+                            {/* Left */}
+                            <div className="w-full">
+                                <p
+                                    className="text-red-700 uppercase font-semibold tracking-widest font-serif"
+                                >
+                                    Your Space to focus
+                                
+                                </p>
+
+                                <h2
+                                    className="font-bold text-4xl sm:text-5xl lg:text-6xl mt-5 leading-snug"
                                 >
 
-                                    { all.length === 0 ? "A fresh page." 
-                                     : active.length === 0 ? "No active task found" : "No completed task found"}
-                                    
-                                </h3>
+                                    Welcome to a clearer day.
+
+                                </h2>
 
                                 <p
-                                    className='text-gray-600 font-serif text-md mt-1'>
+                                    className="text-gray-500 text-sm sm:text-base font-serif mt-5 max-w-[400px] leading-relaxed"
+                                >
 
-                                    { all.length === 0 ? "Add your first task above to get started." : ""}
-                                    
+                                    meet a thoughtful home for your to-dos. Gather
+                                    what's on you mind, see what matters next, and
+                                    make a little progress every day.
+
                                 </p>
-                            </div>)
-                            : (<div className='flex flex-col justify-center min-h-full mt-10 items-center'>
-                                    <div className='h-10 w-10 border-4 border-gray-300 border-t-blue-600 rounded-full
-                                     animate-spin'>
+
+                                <div className="flex flex-col xs:flex-row sm:flex-row gap-3 mt-7">
+                                    <button
+                                        className="px-4 py-2 bg-amber-700 rounded-lg text-white font-serif font-semibold shadow-sm
+                                            transition-all duration-500 hover:-translate-y-2 hover:bg-amber-800 hover:shadow-lg w-full sm:w-auto"
+                                        onClick={() => navigate('/login')}
+                                    >
+
+                                        Log in
+                                    
+                                    </button>
+
+                                    <button
+                                        className="px-4 py-2 bg-white text-gray-900 font-semibold font-serif border border-black
+                                            rounded-lg hover:bg-black hover:text-white transition-transform duration-500 hover:-translate-y-2
+                                            w-full sm:w-auto"
+                                        onClick={() => navigate('/register')}
+                                    >
+
+                                        Register
+                                        
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            {/* Right */}
+                            <div className="bg-white rounded-2xl w-full min-w-0 shadow-xl overflow-hidden">
+                                <div className="flex justify-between gap-3 px-5 sm:px-8 lg:px-10 py-5 min-w-0">
+                                    <div>
+                                        <p
+                                            className="text-red-700 uppercase font-semibold tracking-widest font-serif mb-2"
+                                        >
+
+                                            a look inside
+                                        
+                                        </p>
+
+                                        <h2
+                                            className="text-3xl font-semibold font-serif"
+                                        >
+
+                                            Your day, at a glance.
+
+                                        </h2>
+
+                                        <p
+                                            className="text-gray-400 text-md"
+                                        >
+
+                                            A little structure makes room for the good stuff.
+
+                                        </p>
 
                                     </div>
-                                    <h2>Loading</h2>
-                            </div>)
-                            }
-                    </div>
 
-                </div>
-            </div>
+                                    <div className=" flex justify-center items-center w-10 h-10 bg-gray-200 rounded-xl">
+                                            <FaCheck />
+                                    </div>
+                                    
+                                </div>
+
+                                <hr className="border-1 border-gray-200"/>
+
+                                <div className="px-5 sm:px-8 lg:px-10 py-7 md:py-2 lg:py-9">
+
+                                    <div className="flex justify-between">
+
+                                        <p className="text-md text font-semibold font-serif">
+
+                                            Today's priorities
+
+                                        </p>
+
+                                        <p
+                                            className="bg-gray-200 px-4 py-2 rounded-xl font-serif font-semibold text-gray-400 text-xs"
+                                        >
+
+                                            2 to go
+
+                                        </p>
+
+                                    </div>
+
+                                    <div className="flex flex-col gap-y-3">
+                                        <div className="flex items-center gap-5">
+                                            <p className="h-5 w-5 border-2 border-red-600 rounded-full shrink-0"></p>
+
+                                            <p>Plan the week ahead</p>
+                                        </div>
+
+                                        <hr className="border-1 border-gray-300"/>
+
+                                        <div className="flex items-center gap-4 py-2">
+                                            <p className="h-5 w-5 border-2 border-red-600 rounded-full shrink-0"></p>
+
+                                            <p>Send the project update</p>
+                                        </div>
+
+                                        <hr className="border-1 border-gray-300"/>
+
+                                        <div className="flex items-center gap-5">
+                                            <p className="flex justify-center items-center h-5 w-5 bg-green-500 rounded-full shrink-0">
+                                                <FiCheck  className="text-white"/>
+                                            </p>
+
+                                            <p className="line-through text-gray-400">Plan the week ahead</p>
+                                        </div>
+                                        
+                                    </div>
+
+                                </div>
+
+                                <hr className="border border-gray-200"/>
+                                <div className="flex items-center px-10 py-5 bg-gray-100 rounded-b-2xl" >
+
+                                    <span className="h-2 w-2 rounded-full bg-orange-600 mr-3 font-extrabold text-5xl"></span>
+
+                                    <p
+                                        className="text-gray-500 font-serif"
+                                    >One thing at a time. You've got this.</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
         </div>
     )
 }
