@@ -16,9 +16,9 @@ Screenshots of the application will be added here.
 | ------------------------------------ | ---------------------------------------------- |
 | ![Login Page](screenshots/login.png) | ![Registration Page](screenshots/register.png) |
 
-| Home                          | Dashboard                               |
-| ----------------------------- | --------------------------------------- |
-| ![Home](screenshots/home.png) | ![Dashboard](screenshots/dashboard.png) |
+| Home                          | Task Management                               |
+| ----------------------------- | --------------------------------------------- |
+| ![Home](screenshots/home.png) | ![Task Management](screenshots/dashboard.png) |
 
 ## Features
 
