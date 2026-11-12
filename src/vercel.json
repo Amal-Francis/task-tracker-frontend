@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://task-tracker-backend-rrol.onrender.com/api/:path*" },
+    { "source": "/backend/:path*", "destination": "https://task-tracker-backend-rrol.onrender.com/api/:path*" },
     { "source": "/sanctum/:path*", "destination": "https://task-tracker-backend-rrol.onrender.com/sanctum/:path*" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/((?!backend|sanctum).*)", "destination": "/index.html" }
   ]
 }
