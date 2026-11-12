@@ -1,70 +1,155 @@
-# Getting Started with Create React App
+# Task Tracker – Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A responsive full-stack Task Tracker application built with **React.js** and **Tailwind CSS**. It allows users to register, log in, create and manage personal tasks, track their completion status, and organize their daily activities through a clean and interactive interface.
 
-## Available Scripts
+## Live Demo
 
-In the project directory, you can run:
+🌐 **Application:** [Task Tracker – Live](https://task-tracker-frontend-pearl-eta.vercel.app/)
 
-### `npm start`
+🎥 **Video Demonstration:** Coming soon
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Screenshots
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Screenshots of the application will be added here.
 
-### `npm test`
+| Login Page | Registration Page |
+|---|---|
+| ![Login Page](screenshots/login.png) | ![Registration Page](screenshots/register.png) |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+| Home | Dashboard |
+|---|---|
+| ![Home Page](screenshots/home.png) | ![Dashboard](screenshots/dashboard.png) |
 
-### `npm run build`
+## Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **User Registration:** Create a new account.
+- **User Authentication:** Secure login and logout functionality.
+- **Task Creation:** Add new tasks to your personal task list.
+- **Task Management:** Update and delete existing tasks.
+- **Task Completion:** Mark tasks as completed or pending.
+- **Task Filtering:** Organize tasks by all, pending, and completed status.
+- **Responsive Design:** User-friendly interface across different screen sizes.
+- **API Integration:** Communicates with the Laravel backend using Axios.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Technologies Used
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Technology | Purpose |
+|---|---|
+| React.js 19 | Frontend library |
+| JavaScript | Application logic |
+| Tailwind CSS | Styling |
+| Axios | HTTP requests and API integration |
+| React Router DOM | Client-side routing |
+| Motion | UI animations |
+| React Icons | Icons |
 
-### `npm run eject`
+## Backend Repository
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+The frontend communicates with a Laravel REST API.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+🔗 **Backend GitHub:** [Task Tracker – Backend](https://github.com/Amal-Francis/task-Tracker-backend)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**Backend Technologies:**
+- PHP
+- Laravel 12
+- Laravel Sanctum
+- MySQL (local development)
+- Neon PostgreSQL (production database)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Getting Started
 
-## Learn More
+Follow these steps to run the frontend application locally.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Prerequisites
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Make sure you have installed:
 
-### Code Splitting
+- Node.js and npm
+- Git
+- A running instance of the Task Tracker backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### 1. Clone the repository
 
-### Analyzing the Bundle Size
+```bash
+git clone https://github.com/Amal-Francis/task-tracker-frontend.git
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 2. Navigate to the project directory
 
-### Making a Progressive Web App
+```bash
+cd task-tracker-frontend
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### 3. Install dependencies
 
-### Advanced Configuration
+```bash
+npm install
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 4. Configure the backend API URL
 
-### Deployment
+Configure the Axios API base URL in the frontend to point to your locally running Laravel backend.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+For local development, the backend runs at:
 
-### `npm run build` fails to minify
+```text
+http://localhost:8000
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For production, use your deployed backend URL:
+
+```text
+https://task-tracker-backend-rrol.onrender.com
+```
+
+### 5. Start the development server
+
+```bash
+npm start
+```
+
+The application will be available at:
+
+```text
+http://localhost:3000
+```
+
+## Deployment
+
+The application is deployed using:
+
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Production Database:** Neon PostgreSQL
+
+## Project Structure
+
+```text
+task-tracker-frontend/
+│
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── ...
+│   └── App.js
+│
+├── package.json
+├── tailwind.config.js
+├── postcss.config.js
+└── README.md
+```
+
+*The structure above provides a simplified overview. Refer to the source code for the complete project structure.*
+
+## Author
+
+**Amal Francis**
+
+- GitHub: [Amal-Francis](https://github.com/Amal-Francis)
+- Frontend Repository: [task-tracker-frontend](https://github.com/Amal-Francis/task-tracker-frontend)
+- Backend Repository: [task-Tracker-backend](https://github.com/Amal-Francis/task-Tracker-backend)
+
+---
+
+⭐ If you find this project useful, feel free to explore the repository!
