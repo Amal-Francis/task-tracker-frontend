@@ -12,12 +12,21 @@ A responsive full-stack Task Tracker application built with **React.js** and **T
 
 Screenshots of the application will be added here.
 
+<<<<<<< HEAD
 | Login Page                           | Registration Page                              |
 | ------------------------------------ | ---------------------------------------------- |
 | ![Login Page](screenshots/login.png) | ![Registration Page](screenshots/register.png) |
 
 | Home                               | Dashboard                               |
 | ---------------------------------- | --------------------------------------- |
+=======
+| Login Page | Registration Page |
+|---|---|
+| ![Login Page](screenshots/login.png) | ![Registration Page](screenshots/register.png) |
+
+| Home | Dashboard |
+|---|---|
+>>>>>>> 4940efe21b70b11b962e99510adb1b8519615183
 | ![Home Page](screenshots/home.png) | ![Dashboard](screenshots/dashboard.png) |
 
 ## Features
@@ -33,6 +42,7 @@ Screenshots of the application will be added here.
 
 ## Technologies Used
 
+<<<<<<< HEAD
 | Technology       | Purpose                           |
 | ---------------- | --------------------------------- |
 | React.js 19      | Frontend library                  |
@@ -42,6 +52,17 @@ Screenshots of the application will be added here.
 | React Router DOM | Client-side routing               |
 | Motion           | UI animations                     |
 | React Icons      | Icons                             |
+=======
+| Technology | Purpose |
+|---|---|
+| React.js 19 | Frontend library |
+| JavaScript | Application logic |
+| Tailwind CSS | Styling |
+| Axios | HTTP requests and API integration |
+| React Router DOM | Client-side routing |
+| Motion | UI animations |
+| React Icons | Icons |
+>>>>>>> 4940efe21b70b11b962e99510adb1b8519615183
 
 ## Backend Repository
 
@@ -50,6 +71,7 @@ The frontend communicates with a Laravel REST API.
 🔗 **Backend GitHub:** [Task Tracker – Backend](https://github.com/Amal-Francis/task-Tracker-backend)
 
 **Backend Technologies:**
+<<<<<<< HEAD
 
 - PHP
 - Laravel 12
@@ -97,6 +119,54 @@ For local development, the backend runs at:
 http://localhost:8000
 ```
 
+=======
+- PHP
+- Laravel 12
+- Laravel Sanctum
+- MySQL (local development)
+- Neon PostgreSQL (production database)
+
+## Getting Started
+
+Follow these steps to run the frontend application locally.
+
+### Prerequisites
+
+Make sure you have installed:
+
+- Node.js and npm
+- Git
+- A running instance of the Task Tracker backend
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Amal-Francis/task-tracker-frontend.git
+```
+
+### 2. Navigate to the project directory
+
+```bash
+cd task-tracker-frontend
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Configure the backend API URL
+
+Configure the Axios API base URL in the frontend to point to your locally running Laravel backend.
+
+For local development, the backend runs at:
+
+```text
+http://localhost:8000
+```
+
+>>>>>>> 4940efe21b70b11b962e99510adb1b8519615183
 For production, use your deployed backend URL:
 
 ```text
@@ -141,7 +211,11 @@ task-tracker-frontend/
 └── README.md
 ```
 
+<<<<<<< HEAD
 _The structure above provides a simplified overview. Refer to the source code for the complete project structure._
+=======
+*The structure above provides a simplified overview. Refer to the source code for the complete project structure.*
+>>>>>>> 4940efe21b70b11b962e99510adb1b8519615183
 
 ## Author
 
