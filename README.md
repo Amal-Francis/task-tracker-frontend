@@ -6,7 +6,7 @@ A responsive full-stack Task Tracker application built with **React.js** and **T
 
 🌐 **Application:** [Task Tracker – Live](https://task-tracker-frontend-pearl-eta.vercel.app/)
 
-🎥 **Video Demonstration:** [Task Tracker - Demo ](video/demo.mp4)
+🎥 **Video Demonstration:** [Task Tracker - Demo ](https://youtu.be/SrTdbmpHhzQ)
 
 ## Screenshots
 
