@@ -34,12 +34,7 @@ function Login() {
         try{
             setLoading(true);
             
-            await api.get('https://task-tracker-backend-rrol.onrender.com/sanctum/csrf-cookie',
-                {withCredentials:true,
-        
-                }
-            );
-            
+            await api.get('/sanctum/csrf-cookie', { baseURL: '' });            
             await api.post('/login', credentials)
             setCredentials(credentialsFormat);
             navigate('/dashboard');
